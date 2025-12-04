@@ -1,5 +1,6 @@
 #include <thread>
 #include <string>
+#include <cstdlib> // For std::getenv
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
@@ -48,6 +49,9 @@ int main(int argc, char* argv[]){
     // auto src = rclcpp::Node::make_shared("CurrentDomain", srcOption);
     auto bridge = std::make_shared<Bridge>("Bridge", srcOption);
 
+    const char* domain_id_str = std::getenv("ROS_DOMAIN_ID");
+    std::string str(domain_id_str ? domain_id_str : "Null");
+
     uint8_t domain = 99;
     rclcpp::InitOptions options;
     options.set_domain_id(domain);
@@ -55,7 +59,7 @@ int main(int argc, char* argv[]){
     des_context->init(argc, argv, options);
     rclcpp::NodeOptions desOption = rclcpp::NodeOptions();
     desOption.context(des_context);
-    auto des = rclcpp::Node::make_shared("Bridge" + std::to_string(domain), desOption);
+    auto des = rclcpp::Node::make_shared("Bridge_" + str, desOption);
 
     bridge->setup(des);
 
