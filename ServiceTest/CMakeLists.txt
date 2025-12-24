@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
 PROJECT(service_test)
 
 FIND_PACKAGE(ament_cmake REQUIRED)
+FIND_PACKAGE(rclcpp REQUIRED)
 FIND_PACKAGE(std_srvs REQUIRED)
 
 FIND_PACKAGE(ament_cmake_python REQUIRED)
@@ -21,6 +22,20 @@ INSTALL(
 
 INSTALL(
     PROGRAMS src/NetworkAgent.py
+    DESTINATION lib/${PROJECT_NAME}
+)
+
+ADD_EXECUTABLE(
+    ServerCPP 
+    src/TestServer.cpp 
+)
+AMENT_TARGET_DEPENDENCIES(
+    ServerCPP
+    rclcpp 
+    std_srvs 
+)
+INSTALL(
+    TARGETS ServerCPP 
     DESTINATION lib/${PROJECT_NAME}
 )
 
